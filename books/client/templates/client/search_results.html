@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+    <div class="container">
+        <h2>Search Results for "{{ query }}"</h2>
+        <div class="row">
+            {% if products %}
+                {% for product in products %}
+                    <div class="col-12 col-sm-6 col-lg-4">
+                        <div class="single-product-wrapper">
+                            <!-- Product Image -->
+                            <div class="product-img">
+                                {% if product.images.exists %}
+                                    <img src="{{ product.images.first.image.url }}" alt="{{ product.name }}">
+                                {% else %}
+                                    <img src="{% static 'img/default-product.jpg' %}" alt="Default Image">
+                                {% endif %}
+                            </div>
+
+                            <!-- Product Description -->
+                            <div class="product-description">
+                                <span>{{ product.author }}</span>
+                                <a href="{% url 'product-detail' product.id %}">
+                                    <h6>{{ product.name }}</h6>
+                                </a>
+                                <p class="product-price">${{ product.price }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No products found matching your search.</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock main %}

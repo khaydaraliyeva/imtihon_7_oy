@@ -1,0 +1,18 @@
+{% extends 'admin1/base.html' %}
+
+{% block title %}Cart Product Detail{% endblock %}
+
+{% block content %}
+<h1 class="my-4">Cart Product Detail</h1>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ cart_product.quantity }} x {{ cart_product.product.name }} in cart for {{ cart_product.cart.user.username }}</h5>
+        <a href="{% url 'admin-update_cart_product' cart_product.pk %}" class="btn btn-warning">Edit</a>
+        <form action="{% url 'admin-delete_cart_product' cart_product.pk %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+        <a href="{% url 'admin-cart_product_list' %}" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
+{% endblock %}

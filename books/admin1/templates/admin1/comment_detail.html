@@ -1,0 +1,19 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Comment Detail{% endblock %}
+
+{% block content %}
+<h1 class="my-4">Comment Detail</h1>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Comment by {{ comment.user.username }} on {{ comment.product.name }}</h5>
+        <p class="card-text">{{ comment.content }}</p>
+        <a href="{% url 'admin-update_comment' comment.pk %}" class="btn btn-warning">Edit</a>
+        <form action="{% url 'admin-delete_comment' comment.pk %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+        <a href="{% url 'admin-comment_list' %}" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
+{% endblock %}

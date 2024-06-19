@@ -1,0 +1,22 @@
+{% extends 'seller/base.html' %}
+
+{% block title %}Product Video Detail{% endblock %}
+
+{% block content %}
+<h1 class="my-4">Product Video Detail</h1>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Product: {{ video.product.name }}</h5>
+        <video controls class="img-fluid">
+            <source src="{{ video.video.url }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <a href="{% url 'seller-update_product_video' video.pk %}" class="btn btn-warning">Edit</a>
+        <form action="{% url 'seller-delete_product_video' video.pk %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+        <a href="{% url 'seller-product_video_list' %}" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
+{% endblock %}

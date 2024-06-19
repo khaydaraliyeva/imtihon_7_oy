@@ -1,0 +1,35 @@
+{% extends 'admin1/base.html' %}
+
+{% block title %}Cart Products{% endblock %}
+
+{% block content %}
+<h1 class="my-4">Cart Products</h1>
+<a href="{% url 'admin-create_cart_product' %}" class="btn btn-success mb-3">Add Product to Cart</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Cart</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cart_product in cart_products %}
+        <tr>
+            <td>{{ cart_product.cart.user.username }}</td>
+            <td>{{ cart_product.product.name }}</td>
+            <td>{{ cart_product.quantity }}</td>
+            <td>
+                <a href="{% url 'admin-cart_product_detail' cart_product.pk %}" class="btn btn-info btn-sm">View</a>
+                <a href="{% url 'admin-update_cart_product' cart_product.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                <form action="{% url 'admin-delete_cart_product' cart_product.pk %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

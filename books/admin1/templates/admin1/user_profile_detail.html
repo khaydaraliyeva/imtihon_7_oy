@@ -1,0 +1,25 @@
+{% extends 'admin1/base.html' %}
+
+{% block title %}User Profile Detail{% endblock %}
+
+{% block content %}
+<h1 class="my-4">User Profile Detail</h1>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Profile of {{ profile.user.username }}</h5>
+        <p class="card-text"><strong>Status:</strong> {{ profile.get_status_display }}</p>
+        <p class="card-text"><strong>Phone:</strong> {{ profile.phone }}</p>
+        <p class="card-text"><strong>Address:</strong> {{ profile.address }}</p>
+        <p class="card-text"><strong>Date of Birth:</strong> {{ profile.date_of_birth }}</p>
+        {% if profile.image %}
+        <p class="card-text"><strong>Image:</strong> <img src="{{ profile.image.url }}" alt="Profile Image" class="img-fluid"></p>
+        {% endif %}
+        <a href="{% url 'admin-update_user_profile' profile.pk %}" class="btn btn-warning">Edit</a>
+        <form action="{% url 'admin-delete_user_profile' profile.pk %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+        <a href="{% url 'admin-user_profile_list' %}" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
+{% endblock %}

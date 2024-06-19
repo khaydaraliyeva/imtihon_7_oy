@@ -1,0 +1,19 @@
+{% extends 'admin1/base.html' %}
+
+{% block title %}Product Image Detail{% endblock %}
+
+{% block content %}
+<h1 class="my-4">Product Image Detail</h1>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Product: {{ image.product.name }}</h5>
+        <img src="{{ image.image.url }}" alt="Product Image" class="img-fluid">
+        <a href="{% url 'admin-update_product_image' image.pk %}" class="btn btn-warning">Edit</a>
+        <form action="{% url 'admin-delete_product_image' image.pk %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+        <a href="{% url 'admin-product_image_list' %}" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+
+
+<!-- ##### Shop Grid Area Start ##### -->
+<!-- Shop Grid Area Start -->
+<section class="shop_grid_area section-padding-80">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-4 col-lg-3">
+                <div class="shop_sidebar_area">
+                    <!-- Catagory Widget -->
+                    <div class="widget catagory mb-50">
+                        <!-- Widget Title -->
+                        <h6 class="widget-title mb-30">Catagories</h6>
+
+                        <!-- Catagories -->
+                        <div class="catagories-menu">
+                            <ul id="menu-content2" class="menu-content collapse show">
+                                {% for category in categories %}
+                                <li data-toggle="collapse" data-target="#{{ category.name }}">
+                                    <a style='color: black' href="{% url 'search_by_category' category.pk %}">{{ category.name }}</a>
+
+                                    <ul class="sub-menu collapse show" id="{{ category.name }}">
+                                        <li><a href="{% url 'search_by_category' category.pk %}">All</a></li>
+                                        {% for subcategory in category.subcategories.all %}
+                                        <li><a href="{% url 'filter_by_category' subcategory.pk %}">
+                                            {{ subcategory.name }} </a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Price Filter Widget -->
+                    <div class="widget price mb-50">
+                        <!-- Widget Title -->
+                        <h6 class="widget-title mb-30">Filter by</h6>
+                        <!-- Price Widget Title -->
+                        <p class="widget-title2 mb-30">Price</p>
+
+                        <form method="GET" action="{% url 'filter_by_price' %}">
+                            <div class="widget-desc">
+                                <div class="slider-range">
+                                    <div data-min="49" data-max="360" data-unit="$"
+                                         class="slider-range-price ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"
+                                         data-value-min="49" data-value-max="360" data-label-result="Range:">
+                                        <div class="ui-slider-range ui-widget-header ui-corner-all"></div>
+                                        <span class="ui-slider-handle ui-state-default ui-corner-all"
+                                              tabindex="0"></span>
+                                        <span class="ui-slider-handle ui-state-default ui-corner-all"
+                                              tabindex="0"></span>
+                                    </div>
+                                    <div class="range-price">Range: $<span id="min-price">49</span> - $<span
+                                            id="max-price">360</span></div>
+                                </div>
+                                <input type="hidden" name="min_price" id="min_price" value="49">
+                                <input type="hidden" name="max_price" id="max_price" value="360">
+                                <button type="submit" class="btn essence-btn">Filter</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-8 col-lg-9">
+                <div class="shop_grid_product_area">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="product-topbar d-flex align-items-center justify-content-between">
+                                <!-- Total Products -->
+                                <div class="total-products">
+                                    <p><span>{{ products.paginator.count }}</span> products found</p>
+                                </div>
+                                <!-- Sorting -->
+                                <div class="product-sorting d-flex">
+                                    <p>Sort by:</p>
+                                    <form action="#" method="get">
+                                        <select name="select" id="sortByselect">
+                                            <option value="value">Highest Rated</option>
+                                            <option value="value">Newest</option>
+                                            <option value="value">Price: $$ - $</option>
+                                            <option value="value">Price: $ - $$</option>
+                                        </select>
+                                        <input type="submit" class="d-none" value="">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        {% for product in products %}
+                        <!-- Single Product -->
+                        <div class="col-12 col-sm-6 col-lg-4">
+                            <div class="single-product-wrapper">
+                                <!-- Product Image -->
+                                <div class="product-img">
+                                    {% if product.images.exists %}
+                                    <img src="{{ product.images.first.image.url }}" alt="{{ product.name }}">
+                                    {% else %}
+                                    <img src="{% static 'default/default_img.png' %}" alt="Default Image">
+                                    {% endif %}
+                                    <!-- Hover Thumb -->
+                                    {% if product.images.count > 1 %}
+                                    <img class="hover-img" src="{{ product.images.all.1.image.url }}"
+                                         alt="{{ product.name }}">
+                                    {% endif %}
+
+                                    <!-- Product Badge -->
+                                    {% if product.discount %}
+                                    <div class="product-badge offer-badge">
+                                        <span>-{{ product.discount }}%</span>
+                                    </div>
+                                    {% endif %}
+                                    <!-- Favourite -->
+                                    <div class="product-favourite">
+                                        <a href="{% url 'like_product' product.pk %}" class="favme fa fa-heart"></a>
+                                    </div>
+                                </div>
+
+                                <!-- Product Description -->
+                                <div class="product-description">
+                                    <span>{{ product.author }}</span>
+                                    <a href="{% url 'product-detail' product.id %}">
+                                        <h6>{{ product.name }}</h6>
+                                    </a>
+                                    <p class="product-price">
+                                        {% if product.discount %}
+                                        <span class="old-price">${{ product.old_price }}</span>
+                                        {% endif %}
+                                        ${{ product.price }}
+                                    </p>
+
+                                    <!-- Hover Content -->
+                                    <div class="hover-content">
+                                        <!-- Add to Cart -->
+                                        <div class="add-to-cart-btn">
+                                            <a href="{% url 'add_cart' product.id %}" class="btn essence-btn">Add to
+                                                Cart</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- Pagination -->
+                <nav aria-label="navigation">
+                    <ul class="pagination mt-50 mb-70">
+                        {% if products.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page={{ products.previous_page_number }}"><i class="fa fa-angle-left"></i></a></li>
+                        {% endif %}
+                        {% for num in products.paginator.page_range %}
+                        {% if products.number == num %}
+                        <li class="page-item active"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                        {% elif num > products.number|add:-3 and num < products.number|add:3 %}
+                        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                        {% endif %}
+                        {% endfor %}
+                        {% if products.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ products.next_page_number }}"><i class="fa fa-angle-right"></i></a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Shop Grid Area End -->
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const minPriceInput = document.getElementById('min_price');
+        const maxPriceInput = document.getElementById('max_price');
+        const minPriceDisplay = document.getElementById('min-price');
+        const maxPriceDisplay = document.getElementById('max-price');
+
+        $('.slider-range-price').slider({
+            range: true,
+            min: 49,
+            max: 360,
+            values: [49, 360],
+            slide: function(event, ui) {
+                minPriceDisplay.textContent = ui.values[0];
+                maxPriceDisplay.textContent = ui.values[1];
+                minPriceInput.value = ui.values[0];
+                maxPriceInput.value = ui.values[1];
+            }
+        });
+    });
+</script>
+
+
+<!-- ##### Shop Grid Area End ##### -->
+{% endblock main %}

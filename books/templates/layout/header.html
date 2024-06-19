@@ -1,0 +1,131 @@
+{% load static %}
+{% load client_extras %}
+<!-- ##### Header Area Start ##### -->
+<style>
+    .user-login-info {
+    position: relative;
+}
+
+.user-login-info .dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.user-login-info:hover .dropdown {
+    display: block;
+}
+
+.user-login-info .dropdown li {
+    list-style: none;
+}
+
+.user-login-info .dropdown li a {
+    display: block;
+    padding: 10px 20px;
+    color: black;
+    text-decoration: none;
+}
+
+.user-login-info .dropdown li a:hover {
+    background-color: #f5f5f5;
+}
+</style>
+<header class="header_area">
+    <div class="classy-nav-container breakpoint-off d-flex align-items-center justify-content-between">
+        <!-- Classy Menu -->
+        <nav class="classy-navbar" id="essenceNav">
+            <!-- Logo -->
+            <a class="nav-brand" href="{% url 'client-index' %}"><img src="{% static 'img/core-img/logo.png' %}" alt=""></a>
+            <!-- Navbar Toggler -->
+            <div class="classy-navbar-toggler">
+                <span class="navbarToggler"><span></span><span></span><span></span></span>
+            </div>
+            <!-- Menu -->
+            <div class="classy-menu">
+                <!-- close btn -->
+                <div class="classycloseIcon">
+                    <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                </div>
+                <!-- Nav Start -->
+                <div class="classynav">
+                    <ul>
+                        <li><a href="{% url 'client-shop' %}">Books</a>
+                            <div class="megamenu">
+                                <ul class="single-mega cn-col-4">
+                                    {% categories as categories %}
+                                    {% for category in categories %}
+
+                                    <li class="title">{{ category.name }}</li>
+
+                                    {% for subcategory in category.subcategories.all %}
+
+                                    <li><a href="{% url 'filter_by_category' subcategory.id %}">
+                                        {{ subcategory.name }}</a></li>
+
+                                    {% endfor %}
+                                </ul>
+                                <ul class="single-mega cn-col-4">
+                                    {% endfor %}
+                                </ul>
+
+
+                                <div class="single-mega cn-col-4">
+                                    <img src="{% static 'img/bg-img/bg-6.jpg' %}" alt="">
+                                </div>
+                            </div>
+                        </li>
+                        <li><a href="{% url 'contact' %}">Contact</a></li>
+                        {% if request.user.is_authenticated %}
+                        {% user_profile request as user %}
+                        {% if user.status == 'admin' %}
+                        <li><a href="{% url 'admin-index' %}">Dashboard</a></li>
+                        {% elif user.status == 'seller' %}
+                        <li><a href="{% url 'seller-index' %}">Dashboard</a></li>
+                        {% endif %}
+                        {% endif %}
+                    </ul>
+                </div>
+                <!-- Nav End -->
+            </div>
+        </nav>
+
+        <!-- Header Meta Data -->
+        <div class="header-meta d-flex clearfix justify-content-end">
+            <!-- Search Area -->
+            <div class="search-area">
+                <form action="{% url 'search_products' %}" method="get">
+                    <input type="search" name="search" id="headerSearch" placeholder="Type for search">
+                    <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                </form>
+            </div>
+            <!-- Favourite Area -->
+            <div class="favourite-area">
+                <a href="{% url 'liked_products' %}"><img src="{% static 'img/core-img/heart.svg' %}" alt=""></a>
+            </div>
+            <!-- User Login Info -->
+            <div class="user-login-info">
+                <a href="#"><img src="{% static 'img/core-img/user.svg' %}" alt=""></a>
+                <ul class="dropdown">
+                    {% if request.user.is_authenticated %}
+                    <li><a href="{% url 'user_logout' %}">Logout</a></li>
+                    {% else %}
+                    <li><a href="{% url 'user_login' %}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            {% if request.user.is_authenticated %}
+            {% cart request.user.id as cart %}
+            <!-- Cart Area -->
+            <div class="cart-area">
+                <a href="#" id="essenceCartBtn"><img src="{% static 'img/core-img/bag.svg' %}" alt=""> <span>{{ cart.cart_products.count }}</span></a>
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+</header>
+<!-- ##### Header Area End ##### -->

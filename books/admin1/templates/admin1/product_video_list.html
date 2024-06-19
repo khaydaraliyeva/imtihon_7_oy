@@ -1,0 +1,33 @@
+{% extends 'admin1/base.html' %}
+
+{% block title %}Product Videos{% endblock %}
+
+{% block content %}
+<h1 class="my-4">Product Videos</h1>
+<a href="{% url 'admin-create_product_video' %}" class="btn btn-success mb-3">Upload New Video</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Video</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for video in videos %}
+        <tr>
+            <td>{{ video.product.name }}</td>
+            <td>{{ video.video.url }}</td>
+            <td>
+                <a href="{% url 'admin-product_video_detail' video.pk %}" class="btn btn-info btn-sm">View</a>
+                <a href="{% url 'admin-update_product_video' video.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                <form action="{% url 'admin-delete_product_video' video.pk %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

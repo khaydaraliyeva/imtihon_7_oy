@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+
+<style>
+        /* Comments Area */
+        .comments-area {
+            margin-top: 50px;
+        }
+
+        .comments-area h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .single-comment {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .single-comment strong {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .single-comment p {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .single-comment small {
+            color: #999;
+            font-size: 12px;
+        }
+
+        /* Add Comment Area */
+        .add-comment-area {
+            margin-top: 30px;
+        }
+
+        .add-comment-area h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .add-comment-area .form-group {
+            margin-bottom: 15px;
+        }
+
+        .add-comment-area label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .add-comment-area textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .add-comment-area button {
+            display: inline-block;
+            background-color: #000;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .add-comment-area button:hover {
+            background-color: #333;
+        }
+    </style>
+
+    <!-- ##### Single Product Details Area Start ##### -->
+    <section class="single_product_details_area d-flex align-items-center">
+
+        <!-- Single Product Thumb -->
+        <div class="single_product_thumb clearfix">
+            <div class="product_thumbnail_slides owl-carousel">
+                {% for image in product.images.all %}
+                    <img src="{{ image.image.url }}" alt="Image for {{ product.name }}">
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Single Product Description -->
+        <div class="single_product_desc clearfix">
+            <span>{{ product.author }}</span>
+            <a href="#">
+                <h2>{{ product.name }}</h2>
+            </a>
+            <p class="product-price">${{ product.price }}</p>
+            <p class="product-desc">{{ product.description }}</p>
+
+            <!-- Form -->
+            <form class="cart-form clearfix" method="post">
+                {% csrf_token %}
+                <div class="cart-fav-box d-flex align-items-center">
+                    <!-- Cart -->
+                    <a href="{% url 'add_cart' product.id %}" class="btn essence-btn">Add to cart</a>
+                    <!-- Favourite -->
+                    <div class="product-favourite ml-4">
+                        <a href="{% url 'like_product' product.pk %}" class="favme fa fa-heart"></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+    <!-- ##### Single Product Details Area End ##### -->
+
+    <!-- ##### Comments Area Start ##### -->
+    <section class="comments-area">
+        <h3>Comments</h3>
+        {% for comment in comments %}
+            <div class="single-comment">
+                <strong>{{ comment.user.username }}</strong>:
+                <p>{{ comment.content }}</p>
+                <small>{{ comment.created_at }}</small>
+            </div>
+        {% endfor %}
+    </section>
+    <!-- ##### Comments Area End ##### -->
+
+    <!-- ##### Add Comment Area Start ##### -->
+    <section class="add-comment-area">
+        <h3>Add a Comment</h3>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ comment_form.content.label_tag }}
+                {{ comment_form.content }}
+            </div>
+            <button type="submit" class="btn essence-btn">Submit</button>
+        </form>
+    </section>
+    <!-- ##### Add Comment Area End ##### -->
+
+{% endblock main %}
+

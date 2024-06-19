@@ -1,0 +1,21 @@
+{% extends 'admin1/base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<h1 class="my-4">Admin Dashboard</h1>
+<div class="row">
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h4 class="card-title">User Profiles</h4>
+                <p class="card-text">Number of User Profiles: {{ user_profile_count }}</p>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'admin-user_profile_list' %}" class="btn btn-primary">View List</a>
+            </div>
+        </div>
+    </div>
+    <!-- Repeat similar blocks for other models: Category, Brand, Product, etc. -->
+</div>
+{% endblock %}

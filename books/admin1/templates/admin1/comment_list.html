@@ -1,0 +1,35 @@
+{% extends 'admin1/base.html' %}
+
+{% block title %}Comments{% endblock %}
+
+{% block content %}
+<h1 class="my-4">Comments</h1>
+<a href="{% url 'admin-create_comment' %}" class="btn btn-success mb-3">Add Comment</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Product</th>
+            <th>Content</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for comment in comments %}
+        <tr>
+            <td>{{ comment.user.username }}</td>
+            <td>{{ comment.product.name }}</td>
+            <td>{{ comment.content }}</td>
+            <td>
+                <a href="{% url 'admin-comment_detail' comment.pk %}" class="btn btn-info btn-sm">View</a>
+                <a href="{% url 'admin-update_comment' comment.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                <form action="{% url 'admin-delete_comment' comment.pk %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

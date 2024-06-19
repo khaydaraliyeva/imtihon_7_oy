@@ -1,0 +1,33 @@
+{% extends 'seller/base.html' %}
+
+{% block title %}Product Images{% endblock %}
+
+{% block content %}
+<h1 class="my-4">Product Images</h1>
+<a href="{% url 'seller-create_product_image' %}" class="btn btn-success mb-3">Upload New Image</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Image</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for image in images %}
+        <tr>
+            <td>{{ image.product.name }}</td>
+            <td><img src="{{ image.image.url }}" class="img-fluid" style="max-width: 100px;"></td>
+            <td>
+                <a href="{% url 'seller-product_image_detail' image.pk %}" class="btn btn-info btn-sm">View</a>
+                <a href="{% url 'seller-update_product_image' image.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                <form action="{% url 'seller-delete_product_image' image.pk %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'admin1/base.html' %}
+
+{% block title %}Product Detail{% endblock %}
+
+{% block content %}
+<h1 class="my-4">Product Detail</h1>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Product: {{ product.name }}</h5>
+        <p class="card-text"><strong>Category:</strong> {{ product.category.name }}</p>
+        <p class="card-text"><strong>Brand:</strong> {{ product.brand.name }}</p>
+        <p class="card-text"><strong>Description:</strong> {{ product.description }}</p>
+        <p class="card-text"><strong>Price:</strong> {{ product.price }}</p>
+        <p class="card-text"><strong>Stock:</strong> {{ product.stock }}</p>
+        <p class="card-text"><strong>Available:</strong> {{ product.available }}</p>
+        <a href="{% url 'admin-update_product' product.pk %}" class="btn btn-warning">Edit</a>
+        <form action="{% url 'admin-delete_product' product.pk %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+        <a href="{% url 'admin-product_list' %}" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
+{% endblock %}

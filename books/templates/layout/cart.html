@@ -1,0 +1,68 @@
+{% load static %}
+
+{% load client_extras %}
+
+<!-- ##### Right Side Cart Area ##### -->
+<div class="cart-bg-overlay"></div>
+
+<div class="right-side-cart-area">
+    {% if request.user.is_authenticated %}
+    {% cart request.user.id as cart %}
+    <!-- Cart Button -->
+    <div class="cart-button">
+        <a href="#" id="rightSideCart"><img src="{% static 'img/core-img/bag.svg' %}" alt=""> <span>{{ cart.cart_products.count }}</span></a>
+    </div>
+    {% endif %}
+    <div class="cart-content d-flex">
+
+        <!-- Cart List Area -->
+        <div class="cart-list">
+            {% if request.user.is_authenticated %}
+            {% cart request.user.id as cart %}
+            {% for cart_product in cart.cart_products.all %}
+            <!-- Single Cart Item -->
+            <div class="single-cart-item">
+                <a href="#" class="product-image">
+                    <img src="{{ cart_product.product.images.first.image.url }}" class="cart-thumb" alt="">
+                    <!-- Cart Item Desc -->
+                    <div class="cart-item-desc">
+                        <span class="product-remove"><i class="fa fa-close" aria-hidden="true"></i></span>
+                        <span class="badge">{{ cart_product.product.brand.name }}</span>
+                        <h6>{{ cart_product.product.name }}</h6>
+                        <p class="price">${{ cart_product.product.price }}</p>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+
+        <!-- Cart Summary -->
+        <div class="cart-amount-summary">
+
+            <h2>Summary</h2>
+            <ul class="summary-table">
+                {% if request.user.is_authenticated %}
+                {% cart request.user.id as cart %}
+                {% if cart %}
+                {% for cart_product in cart.cart_products.all %}
+
+                <li><span>{{ cart_product.product.name }} {{ cart_product.quantity}}X :</span> <span>${{ cart_product.price }}</span></li>
+
+                {% endfor %}
+                <br><br>
+                <li><span>delivery:</span> <span>Free</span></li>
+                {% if request.user.is_authenticated %}
+                {% cart request.user.id as cart %}
+                <li><span>total:</span> <span>${{ cart.total_price }}</span></li>
+                {% endif %}
+                {% endif %}
+                {% endif %}
+            </ul>
+            <div class="checkout-btn mt-100">
+                <a href="{% url 'client-checkout' %}" class="btn essence-btn">check out</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ##### Right Side Cart End ##### -->

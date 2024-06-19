@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load client_extras %}
+
+{% block main %}
+
+
+<!-- ##### Top Catagory Area Start ##### -->
+<div class="top_catagory_area section-padding-80 clearfix">
+    <div class="container">
+        <div class="row justify-content-center">
+            {% categories as categories %}
+            <!-- Single Catagory -->
+            {% for category in categories %}
+            <div class="col-12 col-sm-6 col-md-4">
+                {% if category.image %}
+                <div class="single_catagory_area d-flex align-items-center justify-content-center bg-img"
+                     style="background-image: url({{ category.image.url }});">
+                    <div class="catagory-content">
+                        <a href="{% url 'search_by_category' category.pk %}">{{ category.name }}</a>
+                    </div>
+                </div>
+                {% else %}
+                <div class="single_catagory_area d-flex align-items-center justify-content-center bg-img"
+                     style="background-image: url({% static 'default/default_img.png' %});">
+                    <div class="catagory-content">
+                        <a href="{% url 'search_by_category' category.pk %}">{{ category.name }}</a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!-- ##### Top Catagory Area End ##### -->
+
+<!-- ##### New Arrivals Area Start ##### -->
+<section class="new_arrivals_area section-padding-80 clearfix">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-heading text-center">
+                    <h2>Latest Add Books</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="popular-products-slides owl-carousel">
+
+                    {% for product in products %}
+                    <div class="single-product-wrapper">
+                        <!-- Product Image -->
+                        <div class="product-img">
+                            {% if product.images.all %}
+                            <img src="{{ product.images.first.image.url }}" alt="">
+                            <!-- Hover Thumb -->
+                            {% if product.images.count > 1 %}
+                            <img class="hover-img" src="{{ product.images.all.1.image.url }}" alt="">
+                            {% endif %}
+                            {% else %}
+                            <img src="{% static 'default/default_img.png' %}" alt="Default Image">
+                            {% endif %}
+
+                            <!-- Product Badge -->
+                            {% if product.created_at > now|date:"Y-m-d" %}
+                            <div class="product-badge new-badge">
+                                <span>New</span>
+                            </div>
+                            {% endif %}
+
+                            <!-- Favourite -->
+                            <div class="product-favourite">
+                                <a href="{% url 'like_product' product.pk %}" class="favme fa fa-heart"></a>
+                            </div>
+                        </div>
+                        <!-- Product Description -->
+                        <div class="product-description">
+                            <span>{{ product.author }}</span>
+                            <a href="single-product-details.html">
+                                <h6><a href="{% url 'product-detail' product.pk %}">{{ product.name }}</a></h6>
+                            </a>
+                            <p class="product-price">${{ product.price }}</p>
+
+                            <!-- Hover Content -->
+                            <div class="hover-content">
+                                <!-- Add to Cart -->
+                                <div class="add-to-cart-btn">
+                                    <a href="{% url 'add_cart' product.pk %}" class="btn essence-btn">Add to Cart</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ##### New Arrivals Area End ##### -->
+{% endblock main %}

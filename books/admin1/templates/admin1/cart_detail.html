@@ -1,0 +1,20 @@
+{% extends 'admin1/base.html' %}
+
+{% block title %}Cart Detail{% endblock %}
+
+{% block content %}
+<h1 class="my-4">Cart Detail</h1>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Cart for {{ cart.user.username }}</h5>
+        <p class="card-text"><strong>Created At:</strong> {{ cart.created_at }}</p>
+        <p class="card-text"><strong>Updated At:</strong> {{ cart.updated_at }}</p>
+        <a href="{% url 'update_cart' cart.pk %}" class="btn btn-warning">Edit</a>
+        <form action="{% url 'delete_cart' cart.pk %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+        <a href="{% url 'cart_list' %}" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
+{% endblock %}
